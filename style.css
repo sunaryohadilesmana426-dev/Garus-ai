@@ -1,0 +1,18 @@
+:root{--bg:#05060a;--panel:#081024;--accent:#b91c1c;--accent-2:#ffd300;--text:#f7f7f8}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,Roboto,system-ui;background:radial-gradient(circle at 10% 10%, #101420 0%, #05060a 50%);color:var(--text)}
+.app{max-width:720px;margin:18px auto;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03)}
+header{display:flex;gap:12px;align-items:center}
+.logo{width:72px;height:72px;border-radius:8px;border:2px solid rgba(255,255,255,0.03);object-fit:contain}
+header h1{margin:0;font-size:20px;color:var(--accent)}
+.subtitle{margin:4px 0 12px;color:rgba(255,215,0,0.9);font-size:13px}
+.chat-box{height:56vh;overflow:auto;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:8px;border:1px solid rgba(255,255,255,0.02)}
+.message{padding:10px 12px;border-radius:10px;margin-bottom:8px;max-width:80%}
+.message.user{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001;margin-left:auto;text-align:right;box-shadow:0 6px 18px rgba(0,0,0,0.2)}
+.message.bot{background:rgba(255,255,255,0.03);color:var(--text);margin-right:auto}
+.controls{display:flex;gap:8px;margin-top:10px}
+.controls input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+.controls button{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001;cursor:pointer}
+.tools{display:flex;gap:8px;align-items:center;margin-top:10px}
+.tools button{padding:8px 10px;border-radius:8px;border:none;background:#111827;color:var(--text);cursor:pointer}
+.tools .toggle{margin-left:auto;color:rgba(207,239,253,0.7);font-size:13px;display:flex;align-items:center;gap:8px}
+footer{margin-top:12px;text-align:center;color:rgba(207,239,253,0.3);font-size:12px}
