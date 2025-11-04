@@ -1,0 +1,31 @@
+name: 🚀 Build & Deploy Garus AI v2 Neon
+
+on:
+  push:
+    branches: [ utama ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 🧱 Build static files
+        run: |
+          echo "Building Garus AI v2 Neon..."
+          mkdir -p build
+          cp -r * build/
+          echo "Build complete!"
+
+      - name: 🌐 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
