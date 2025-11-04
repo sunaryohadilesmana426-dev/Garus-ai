@@ -4,32 +4,44 @@ const sendBtn = document.getElementById('send-btn');
 const clearBtn = document.getElementById('clear-btn');
 const micBtn = document.getElementById('mic-btn');
 const modeToggle = document.getElementById('mode-toggle');
+const startListenBtn = document.getElementById('start-listen');
+const stopListenBtn = document.getElementById('stop-listen');
+const toggleVoiceBtn = document.getElementById('toggle-voice');
+const voiceStatusSpan = document.getElementById('voiceStatus');
 
 let chatHistory = [];
+let voiceEnabled = true;
+let recognizing = false;
+let recognition = null;
 
-// Default Ollama proxy IP — edit in-app or replace with your PC IP
-let OLLAMA_IP = "192.168.1.100"; // default as requested
-const LOCAL_API = `http://${OLLAMA_IP}:5000/api/chat`;
+// Default Ollama proxy IP
+let OLLAMA_IP = "192.168.1.100";
+const LOCAL_API = f"http://{OLLAMA_IP}:5000/api/chat" if False else "http://192.168.1.100:5000/api/chat";
 
-// Append message
 function appendMessage(role, text){
   const d = document.createElement('div');
-  d.className = 'message ' + (role==='user'?'user':'bot');
+  d.className = 'message ' + (role==='user' ? 'user' : 'bot');
   d.textContent = text;
   chatBox.appendChild(d);
   chatBox.scrollTop = chatBox.scrollHeight;
+  return d;
 }
 
-// Send message to Ollama or offline fallback
 async function sendMessage(){
-  const text = input.value.trim(); if(!text) return;
+  const text = input.value.trim();
+  if(!text) return;
   chatHistory.push({role:'user', content:text});
   appendMessage('user', text);
-  input.value='';
-  const loading = document.createElement('div'); loading.className='message bot'; loading.textContent='Mengetik...'; chatBox.appendChild(loading); chatBox.scrollTop=chatBox.scrollHeight;
+  input.value = '';
+  const loading = appendMessage('bot', 'Mengetik...');
+
   try {
     if(modeToggle.checked){
-      const res = await fetch(LOCAL_API, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:[{role:'system',content:'Kamu adalah asisten ramah berbahasa Indonesia.'}, ...chatHistory]})});
+      const res = await fetch(LOCAL_API, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({messages: [{role:'system', content:'Kamu adalah asisten ramah berbahasa Indonesia.'}, ...chatHistory]})
+      });
       if(!res.ok) throw new Error('Ollama tidak tersedia di ' + LOCAL_API);
       const j = await res.json();
       const reply = j.reply || j.raw?.response || 'Tidak ada jawaban';
@@ -42,12 +54,11 @@ async function sendMessage(){
       chatHistory.push({role:'assistant', content:reply});
       speak(reply);
     }
-  } catch(err){
+  } catch (err) {
     loading.textContent = 'Error: ' + err.message;
   }
 }
 
-// Simple offline replies
 function offlineReply(text){
   const t = text.toLowerCase();
   if(t.includes('halo')||t.includes('hai')) return 'Halo! Saya Garus AI. Ada yang bisa saya bantu?';
@@ -57,14 +68,34 @@ function offlineReply(text){
   return 'Saya: ' + text.split('').reverse().join('').slice(0,120) + ' ... (mode offline)';
 }
 
-// Voice
+function speak(text){
+  if(!voiceEnabled) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'id-ID';
+  u.volume = 1;
+  u.rate = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+// Voice recognition (mic)
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if(SpeechRecognition){
-  const rec = new SpeechRecognition(); rec.lang='id-ID';
-  rec.onresult = (e)=>{ input.value = e.results[0][0].transcript; sendMessage(); };
-  micBtn.onclick = ()=> rec.start();
+  recognition = new SpeechRecognition();
+  recognition.lang = 'id-ID';
+  recognition.interimResults = false;
+  recognition.onstart = () => { recognizing = true; appendMessage('bot', '🎙️ Mendengarkan...'); };
+  recognition.onend = () => { recognizing = false; appendMessage('bot', '🛑 Selesai mendengarkan'); };
+  recognition.onresult = (e) => {
+    const text = e.results[e.results.length-1][0].transcript;
+    input.value = text;
+    sendMessage();
+  };
 }
-function speak(text){ const u = new SpeechSynthesisUtterance(text); u.lang='id-ID'; window.speechSynthesis.speak(u); }
+
+startListenBtn?.addEventListener('click', ()=>{ if(recognition && !recognizing) recognition.start(); });
+stopListenBtn?.addEventListener('click', ()=>{ if(recognition && recognizing) recognition.stop(); });
+toggleVoiceBtn?.addEventListener('click', ()=>{ voiceEnabled = !voiceEnabled; voiceStatusSpan.textContent = voiceEnabled ? 'ON' : 'OFF'; });
 
 sendBtn.addEventListener('click', sendMessage);
 input.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });

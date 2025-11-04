@@ -3,32 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Garus AI - Next Generation</title>
+  <title>GARUS.AI - Neon</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
     <header>
-      <img src="assets/logo.png" alt="Garus AI" class="logo"/>
+      <img src="assets/logo.png" alt="GARUS Logo" class="logo"/>
       <div>
-        <h1>Garus AI</h1>
+        <h1>GARUS.AI</h1>
         <p class="subtitle">Next Generation — Offline + Ollama</p>
       </div>
     </header>
+
     <main>
       <div id="chat-box" class="chat-box"></div>
+
       <div class="controls">
         <input id="user-input" placeholder="Ketik pesan..." autocomplete="off"/>
         <button id="send-btn">Kirim</button>
       </div>
+
       <div class="tools">
         <button id="clear-btn">Hapus Chat</button>
         <button id="mic-btn">🎙️ Bicara</button>
         <label class="toggle"><input id="mode-toggle" type="checkbox" /> Gunakan Ollama (jika tersedia)</label>
       </div>
+
+      <div id="voice-controls" class="voice-controls">
+        <button id="start-listen">🎙️ Mulai</button>
+        <button id="stop-listen">⏹️ Stop</button>
+        <button id="toggle-voice">🔊 Suara: <span id="voiceStatus">ON</span></button>
+      </div>
     </main>
-    <footer>Garus AI — Offline first</footer>
+
+    <footer>GARUS.AI — Offline first</footer>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

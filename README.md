@@ -1,23 +1,17 @@
-# Garus AI - Next Generation (Final GitHub-ready)
+GARUS.AI v2 - Neon (Offline + Ollama + Voice)
+=============================================
 
-This repository builds an Android APK named `garus.ai.apk` via GitHub Actions.
-It contains an offline-first app plus optional Ollama connectivity (default IP 192.168.1.100).
+This package contains the Garus AI v2 web app ready to be wrapped into an Android app (Cordova).
+Features:
+- Neon futuristic theme
+- Offline fallback + Ollama proxy support (default IP 192.168.1.100)
+- Mic input (SpeechRecognition) and Voice output (SpeechSynthesis)
+- No login required
 
-## What is included
-- `www/` : web app (Cordova) with red-black-gold futurist theme
-- `www/assets/logo.png` : placeholder logo (replace with your GARUS PNG 512x512)
-- GitHub Actions workflow: `.github/workflows/build-apk.yml` that builds APK on push to `main`
+How to use:
+1. Replace assets/logo.png with your GARUS PNG (512x512 recommended).
+2. If you want Ollama on your PC, run ollama and the backend proxy (server.js) from previous package.
+3. To build APK via GitHub Actions, include the workflow file in .github/workflows/build-apk.yml (we provided in previous package).
 
-## Quick steps to get APK (3 steps)
-1. Replace the placeholder logo:
-   - Put your real GARUS PNG file at `www/assets/logo.png` (recommended 512×512, transparent background).
-2. Create a new GitHub repository, commit & push all files from this ZIP to the `main` branch.
-3. Open the repository on GitHub → go to **Actions** → wait for the `build-apk` workflow to finish → download the artifact `GarusAI-apk` which contains the APK (artifact filename usually `app-*-release.apk`).
-
-**Default Ollama IP:** `192.168.1.100` — if your PC has a different IP, edit `www/script.js` and change `OLLAMA_IP` variable before pushing.
-
-## Notes about signing/installing
-- The APK in artifacts may be unsigned; to install on many Android devices, you can install debug builds directly (enable Unknown Sources). For Play Store distribution you must sign the APK with your keystore.
-- The workflow uses Cordova + Android SDK on GitHub-hosted runner. Build time ~3–8 minutes.
-
-If you want, I can also push this repo to your GitHub for you (you'd need to provide a temporary access token) or generate the APK in a CI account you provide. Otherwise follow steps above and tell me when it's uploaded; I'll guide you to download the APK step-by-step.
+Notes:
+- Some mobile browsers may restrict microphone use on file:// pages. For full mic support, wrap into WebView (APK) or serve via local HTTP server.
