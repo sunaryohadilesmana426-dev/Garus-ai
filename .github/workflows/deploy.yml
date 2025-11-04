@@ -1,4 +1,4 @@
-name: 🚀 Build & Deploy Garus AI v2 Neon
+name: 🚀 Build & Deploy Garus AI 
 
 on:
   push:
